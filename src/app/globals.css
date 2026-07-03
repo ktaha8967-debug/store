@@ -1,0 +1,315 @@
+:root {
+  /* Color Palette */
+  --primary: #1F4B43;
+  --secondary: #F4E8D2;
+  --accent: #C8A45D;
+  --background: #FAF9F6;
+  --text: #222222;
+  --surface: #ffffff;
+  --error: #D32F2F;
+  --success: #388E3C;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.06);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #C8A45D;
+    --secondary: #1a2522;
+    --accent: #F4E8D2;
+    --background: #111514;
+    --text: #FAF9F6;
+    --surface: #1a201e;
+    --glass-bg: rgba(26, 32, 30, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--background);
+  color: var(--text);
+  font-family: var(--font-inter), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--transition-slow), color var(--transition-slow);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-outfit), sans-serif;
+  margin-top: 0;
+  font-weight: 300;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 6px;
+  border: 3px solid var(--background);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Glassmorphism Classes */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* UI Elements */
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--background);
+  padding: 1rem 2.5rem;
+  border-radius: 50px; /* Highly rounded for premium feel */
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(31, 75, 67, 0.15);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.96); /* Micro-interaction scale on click */
+}
+
+.btn-accent {
+  background-color: var(--accent);
+  color: var(--primary);
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s;
+}
+
+.btn-accent:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(200, 164, 93, 0.2);
+}
+
+.btn-accent:active {
+  transform: translateY(0) scale(0.96); /* Micro-interaction scale on click */
+}
+
+.card {
+  background-color: var(--surface);
+  border-radius: 20px; /* Modernized larger radius */
+  padding: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.02), 0 1px 3px rgba(0,0,0,0.01);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s;
+  border: 1px solid rgba(0,0,0,0.03);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(200, 164, 93, 0.15);
+}
+
+/* Premium Inputs */
+input, select, textarea {
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input:hover, select:hover, textarea:hover {
+  border-color: var(--accent) !important;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 4px rgba(200, 164, 93, 0.15) !important;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--surface) 25%, var(--secondary) 50%, var(--surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Hero Section — cinematic craftsmanship background */
+.hero-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-background-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  will-change: transform;
+  animation: heroCinematicZoom 22s ease-out forwards;
+}
+
+.hero-background-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.45),
+    rgba(0, 0, 0, 0.5)
+  );
+}
+
+@keyframes heroCinematicZoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-background-image {
+    animation: none;
+  }
+}
+
+/* Timeline Connection for Desktop */
+@media (min-width: 768px) {
+  .timeline-line {
+    display: block !important;
+  }
+}
+
+/* Premium Image Zoom effect on cards */
+.card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s;
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.01);
+  border-color: var(--accent);
+}
+
+/* Custom premium transitions for anchors */
+a:not(.btn-primary):not(.btn-accent) {
+  transition: color var(--transition-fast), opacity var(--transition-fast);
+}
+
+a:not(.btn-primary):not(.btn-accent):hover {
+  color: var(--accent) !important;
+}
+
+/* Scroll behaviour */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Pulsing Hotspot Map Markers */
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(200, 164, 93, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 12px rgba(200, 164, 93, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(200, 164, 93, 0);
+  }
+}
+
+.map-hotspot-container {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.map-hotspot {
+  width: 14px;
+  height: 14px;
+  background-color: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid var(--primary);
+  animation: pulse 2s infinite;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.map-hotspot:hover {
+  transform: scale(1.3);
+  background-color: #FAF9F6;
+}
+
+.map-tooltip {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background-color: rgba(31, 75, 67, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #FAF9F6;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-family: var(--font-inter), sans-serif;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(200, 164, 93, 0.4);
+  font-weight: 500;
+}
+
+.map-hotspot-container:hover .map-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+

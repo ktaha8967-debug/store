@@ -1,0 +1,217 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("BUYER") // "BUYER", "MAKER", "ADMIN", "INSPECTOR"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  makerProfile     MakerProfile?
+  inspectorProfile InspectorProfile?
+  orders           Order[]
+  reviews          Review[]
+  notifications    Notification[]
+  savedMakers      SavedMaker[]
+  wishlist         Wishlist?
+}
+
+model MakerProfile {
+  id                 String   @id @default(uuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id])
+  businessName       String
+  founderName        String?
+  founderStory       String?
+  businessStory      String?
+  country            String
+  verificationStatus String   @default("GENERAL") // "GENERAL", "VERIFIED", "ELITE", "GI"
+  yearsInBusiness    Int      @default(0)
+  coverImage         String?
+  founderPhoto       String?
+  workshopGallery    String?  // JSON string array
+  teamPhotos         String?  // JSON string array
+  productionPhotos   String?  // JSON string array
+  lifestylePhotos    String?  // JSON string array
+  mission            String?
+  employeeCount      Int      @default(1)
+  impactStory        String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  products     Product[]
+  savedByUsers SavedMaker[]
+  stories      Story[]
+}
+
+model InspectorProfile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  region    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  inspections InspectionReport[]
+}
+
+model Product {
+  id                 String   @id @default(uuid())
+  makerId            String
+  maker              MakerProfile @relation(fields: [makerId], references: [id])
+  name               String
+  description        String
+  story              String?
+  category           String
+  price              Float
+  inventory          Int      @default(0)
+  images             String   // JSON string array of 5-8 URLs
+  verificationStatus String   @default("GENERAL") // GENERAL, ELITE, GI
+  origin             String?
+  materials          String?
+  productionMethod   String?
+  dimensions         String?
+  careInstructions   String?
+  shippingInfo       String?
+  returnPolicy       String?
+  isEcoFriendly      Boolean  @default(false)
+  isWomenLed         Boolean  @default(false)
+  isHandmade         Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  orderItems      OrderItem[]
+  productPassport ProductPassport?
+  reviews         Review[]
+  wishlistItems   WishlistItem[]
+}
+
+model ProductPassport {
+  id                 String   @id @default(uuid())
+  passportId         String   @unique @default(uuid())
+  productId          String   @unique
+  product            Product  @relation(fields: [productId], references: [id])
+  originCountry      String
+  originVillage      String?
+  materialsList      String?
+  productionDate     DateTime?
+  inspectionDate     DateTime?
+  verificationHistory String?
+  qrCodeUrl          String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model InspectionReport {
+  id             String   @id @default(uuid())
+  inspectorId    String
+  inspector      InspectorProfile @relation(fields: [inspectorId], references: [id])
+  makerId        String
+  notes          String?
+  qualityScore   Int
+  recommendation String
+  status         String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  gpsLocation    String?
+  images         String?  // JSON string
+  videos         String?  // JSON string
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Order {
+  id          String   @id @default(uuid())
+  buyerId     String
+  buyer       User     @relation(fields: [buyerId], references: [id])
+  status      String   @default("PENDING")
+  totalAmount Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Float
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  buyerId   String
+  buyer     User     @relation(fields: [buyerId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model SavedMaker {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  makerId   String
+  maker     MakerProfile @relation(fields: [makerId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, makerId])
+}
+
+model Wishlist {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  items     WishlistItem[]
+}
+
+model WishlistItem {
+  id         String   @id @default(uuid())
+  wishlistId String
+  wishlist   Wishlist @relation(fields: [wishlistId], references: [id])
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id])
+
+  @@unique([wishlistId, productId])
+}
+
+model Story {
+  id          String   @id @default(uuid())
+  makerId     String
+  maker       MakerProfile @relation(fields: [makerId], references: [id])
+  title       String
+  excerpt     String
+  content     String
+  country     String
+  village     String
+  craft       String
+  heroImage   String
+  photography String?  // JSON string array
+  timeline    String?  // JSON string array
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
